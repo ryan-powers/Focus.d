@@ -15,7 +15,7 @@ struct SettingsView: View {
 
     let focusDurations = [1, 15, 20, 25, 30, 45, 60]
     let breakDurations = [1, 5, 15, 20]
-    let longBreakDurations = [10, 20, 30]
+    let longBreakDurations = [2, 10, 20, 30]
 
     var body: some View {
         ZStack {
