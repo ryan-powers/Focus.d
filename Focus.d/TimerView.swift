@@ -16,6 +16,7 @@ class TimerStats: ObservableObject {
     @Published var breakSessionsCompleted: Int = 0
     @Published var totalBreakMinutes: Int = 0
     @Published var interruptions: Int = 0
+    @Published var totalSessions: Int = 0
     
     func resetStatistics() {
             focusSessionsStarted = 0
@@ -42,12 +43,10 @@ struct TimerView: View {
     @State private var timer: Timer? = nil
     @State private var timerStarted = false
     @State private var completedFocusSessions: Int = 0
-    @State private var completedCycles = 0
     @State private var currentCycleIndex: Int = 0
-    @State private var progressValues: [CGFloat] = [0, 0, 0, 0]
-    @State private var circleProgress: Int = 0
+    @State private var pauseActivated = false
     
-
+    
     
     init(timerStats: TimerStats, isBreakTime: Binding<Bool>) {
         self._isBreakTime = isBreakTime // Initialize isBreakTime
@@ -62,27 +61,16 @@ struct TimerView: View {
                 Text(isBreakTime ? "Rest" : "Focus")
                     .font(.system(size: 40))
                     .fontWeight(.medium)
-                    .padding(.bottom, 100.0)
+                    .padding(.bottom, 20.0)
                     .frame(height: 5.0)
                 Text("\(timeRemaining / 60):\(timeRemaining % 60 < 10 ? "0" : "")\(timeRemaining % 60)")
-                    .font(.system(size: 65))
+                    .font(.system(size: 85))
                     .fontWeight(.thin)
                     .padding(.bottom, 2.0)
                 
                 HStack(spacing: 10) {
                     ForEach(0..<4) { index in
-                        ZStack {
-                            if progressValues[index] >= 1.0 {
-                                Image(systemName: "circle.fill")
-                                    .resizable()
-                                    .frame(width: 8.0, height: 8.0)
-                            }
-                            if progressValues[index] < 2.0 {
-                                Image(systemName: "circle.lefthalf.fill")
-                                    .resizable()
-                                    .frame(width: 8.0, height: 8.0)
-                            }
-                        }
+                        CircleFill(index: index, totalSessions: timerStats.totalSessions)
                     }
                 }
                 
@@ -94,8 +82,10 @@ struct TimerView: View {
                     if isRunning {
                         timerStarted = true // update state variable
                         startTimer()
+                        pauseActivated = false
                     } else {
                         stopTimer()
+                        pauseActivated = true
                     }
                 }) {
                     if isRunning {
@@ -144,7 +134,7 @@ struct TimerView: View {
             }
         }
     }
-
+    
     private func startTimer() {
         guard timer == nil else { return }
 
@@ -153,8 +143,10 @@ struct TimerView: View {
         } else {
             timerStats.focusSessionsStarted += 1
         }
-
-        isBreakTime.toggle() // Toggle isBreakTime when timer starts
+        
+        if !pauseActivated {
+            timerStats.totalSessions += 1
+        }
 
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             if timeRemaining > 0 {
@@ -165,25 +157,23 @@ struct TimerView: View {
 
                 if isBreakTime {
                     timerStats.breakSessionsCompleted += 1
-                    if currentCycleIndex < 3 {
+                    if currentCycleIndex < 6 {
                         timerStats.totalBreakMinutes += breakDuration
                         timeRemaining = focusDuration * 60
-                        currentCycleIndex += 1
+                        currentCycleIndex += 2
                     } else {
                         timerStats.totalBreakMinutes += longBreakDuration
-                        timeRemaining = focusDuration * 60
-                        currentCycleIndex = 0
-                        completedFocusSessions = 0
-                        completedCycles = 0 // Reset completedCycles
+                        resetTimer()
+                        return
                     }
                     isBreakTime = false
-                } else {
+                }
+                else {
                     timerStats.focusSessionsCompleted += 1
                     timerStats.totalFocusMinutes += focusDuration
                     isBreakTime = true
                     completedFocusSessions += 1
-                    completedCycles += 1 // Increment completedCycles when focus session is completed
-                    if currentCycleIndex < 3 {
+                    if currentCycleIndex < 6 {
                         timeRemaining = breakDuration * 60
                     } else {
                         timeRemaining = longBreakDuration * 60
@@ -191,12 +181,15 @@ struct TimerView: View {
                 }
 
                 if autoFlow {
-                    isRunning = true
+                    isRunning = true && currentCycleIndex < 7
                     startTimer()
+                } else {
+                    stopTimer()
                 }
             }
         }
     }
+
     
     private func stopTimer() {
         timer?.invalidate()
@@ -208,31 +201,55 @@ struct TimerView: View {
             }
         }
     }
-
+    
     private func resetTimer() {
         stopTimer()
         isRunning = false
         isBreakTime = false
         timeRemaining = focusDuration * 60
         timerStarted = false
-        progressValues = [0, 0, 0, 0]
-        completedCycles = 0
-        circleProgress = 0
+        timerStats.totalSessions = 0
+        currentCycleIndex = 0
+        completedFocusSessions = 0
     }
-}
-
-
-struct TimerView_Previews: PreviewProvider {
-    @State static var isBreakTimePreview = false
-    static var timerStatsPreview = TimerStats()
     
-    static var previews: some View {
-        TimerView(timerStats: timerStatsPreview, isBreakTime: $isBreakTimePreview)
+    
+    struct CircleFill: View {
+        let index: Int
+        let totalSessions: Int
+        var halfFilled: Bool {
+            return totalSessions - 1 == index * 2
+        }
+        
+        var body: some View {
+            ZStack {
+                if halfFilled {
+                    Image(systemName: "circle.lefthalf.fill")
+                        .resizable()
+                        .frame(width: 10.0, height: 10.0)
+                } else if totalSessions > index * 2 {
+                    Image(systemName: "circle.fill")
+                        .resizable()
+                        .frame(width: 10.0, height: 10.0)
+                } else {
+                    Image(systemName: "circle")
+                        .resizable()
+                        .frame(width: 10.0, height: 10.0)
+                }
+            }
+        }
+    }
+    
+    
+    
+    
+    
+    struct TimerView_Previews: PreviewProvider {
+        @State static var isBreakTimePreview = false
+        static var timerStatsPreview = TimerStats()
+        
+        static var previews: some View {
+            TimerView(timerStats: timerStatsPreview, isBreakTime: $isBreakTimePreview)
+        }
     }
 }
-
-
-
-
-
-
