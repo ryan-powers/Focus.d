@@ -14,6 +14,8 @@
 		8E4B2D2529E48EC600915F8D /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4B2D2429E48EC500915F8D /* TimerView.swift */; };
 		8E4B2D2829E5C27000915F8D /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4B2D2729E5C27000915F8D /* SettingsView.swift */; };
 		8E4B2D2A29E5FEDE00915F8D /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4B2D2929E5FEDE00915F8D /* StatsView.swift */; };
+		8E5F10D529FC43EB00EAD695 /* TimerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5F10D429FC43EB00EAD695 /* TimerManager.swift */; };
+		8E5F10D729FC442500EAD695 /* TimerStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5F10D629FC442500EAD695 /* TimerStats.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +27,8 @@
 		8E4B2D2429E48EC500915F8D /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		8E4B2D2729E5C27000915F8D /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		8E4B2D2929E5FEDE00915F8D /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
+		8E5F10D429FC43EB00EAD695 /* TimerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerManager.swift; sourceTree = "<group>"; };
+		8E5F10D629FC442500EAD695 /* TimerStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerStats.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +66,8 @@
 				8E4B2D2929E5FEDE00915F8D /* StatsView.swift */,
 				8E4B2D2729E5C27000915F8D /* SettingsView.swift */,
 				8E4B2D2429E48EC500915F8D /* TimerView.swift */,
+				8E5F10D429FC43EB00EAD695 /* TimerManager.swift */,
+				8E5F10D629FC442500EAD695 /* TimerStats.swift */,
 				8E021F5929E4877F00E37EFC /* Assets.xcassets */,
 				8E021F5B29E4877F00E37EFC /* Preview Content */,
 			);
@@ -149,6 +155,8 @@
 				8E4B2D2529E48EC600915F8D /* TimerView.swift in Sources */,
 				8E4B2D2A29E5FEDE00915F8D /* StatsView.swift in Sources */,
 				8E4B2D2829E5C27000915F8D /* SettingsView.swift in Sources */,
+				8E5F10D729FC442500EAD695 /* TimerStats.swift in Sources */,
+				8E5F10D529FC43EB00EAD695 /* TimerManager.swift in Sources */,
 				8E021F5829E4877C00E37EFC /* ContentView.swift in Sources */,
 				8E021F5629E4877C00E37EFC /* Focus_dApp.swift in Sources */,
 			);

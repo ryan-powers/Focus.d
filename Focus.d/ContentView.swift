@@ -81,7 +81,7 @@ struct HomeView: View {
 
     var body: some View {
         ZStack {
-            TimerView(timerStats: timerStats, isBreakTime: $isBreakTime)
+            TimerView(timerManager: TimerManager(isBreakTime: false, timeRemaining: UserDefaults.standard.integer(forKey: "focusDuration") * 60, timerStats: timerStats), timerStats: timerStats, isBreakTime: $isBreakTime)
         }
     }
 }
