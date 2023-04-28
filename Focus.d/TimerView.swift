@@ -61,10 +61,10 @@ struct TimerView: View {
                 Text(isBreakTime ? "Rest" : "Focus")
                     .font(.system(size: 40))
                     .fontWeight(.medium)
-                    .padding(.bottom, 100.0)
+                    .padding(.bottom, 20.0)
                     .frame(height: 5.0)
                 Text("\(timeRemaining / 60):\(timeRemaining % 60 < 10 ? "0" : "")\(timeRemaining % 60)")
-                    .font(.system(size: 65))
+                    .font(.system(size: 85))
                     .fontWeight(.thin)
                     .padding(.bottom, 2.0)
                 
@@ -226,15 +226,15 @@ struct TimerView: View {
                 if halfFilled {
                     Image(systemName: "circle.lefthalf.fill")
                         .resizable()
-                        .frame(width: 8.0, height: 8.0)
+                        .frame(width: 10.0, height: 10.0)
                 } else if totalSessions > index * 2 {
                     Image(systemName: "circle.fill")
                         .resizable()
-                        .frame(width: 8.0, height: 8.0)
+                        .frame(width: 10.0, height: 10.0)
                 } else {
                     Image(systemName: "circle")
                         .resizable()
-                        .frame(width: 8.0, height: 8.0)
+                        .frame(width: 10.0, height: 10.0)
                 }
             }
         }
